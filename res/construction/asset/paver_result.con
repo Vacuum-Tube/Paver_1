@@ -1,0 +1,133 @@
+local paver = require "paver.main"
+
+local strokeModes = {
+	"FILL",
+	"STROKE",
+	"STROKE_INNER",
+	"STROKE_OUTER",
+}
+
+function data()
+return {
+	type = "ASSET_DEFAULT",
+	buildMode = "MULTI",
+	availability = {
+		yearTo = -1
+	},
+	description = {
+		name = "DO NOT USE (Paver tool)",
+		description =  "Help file for the paver. Only visible because of your 'All available' mod.",
+		icon = "ui/construction/asset/paver.tga",
+	},
+	skipCollision = true,
+	autoRemovable = false,
+	params = {
+		{
+			key = "groundType",
+			name = _("Ground Texture Type"),
+			values =  {"ERROR - postRunFn not executed"},
+			uiType = "COMBOBOX",
+		},
+		{
+			key = "strokeMode",
+			name = _("Stroke Mode"),
+			values =  {
+				"FILL",
+				"STROKE",
+				"STROKE_INNER",
+				"STROKE_OUTER",
+			},
+		},
+		{
+			key = "fill",
+			name = _("Fill"),
+			uiType = "CHECKBOX",
+		},
+		{
+			key = "strokeType",
+			name = _("Ground Texture Type"),
+			values =  {"ERROR - postRunFn not executed"},
+			uiType = "COMBOBOX",
+		},
+		{
+			key = "terrainAlignment",
+			name = _("Terrain Alignment"),
+			uiType = "CHECKBOX",
+		},
+	},
+	updateFn = function(params)
+	
+	local status,result	= pcall(function()
+		
+		assert(params.faces, "no params.faces")
+		
+		local result = {
+			models = {
+				{
+					id = paver.markerId,
+					transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
+				}
+			}
+		}
+		
+		if params.terrainAlignment == 1 then
+			result.terrainAlignmentLists = {  {
+					type = "EQUAL",
+					faces = { params.faces },
+					slopeLow = 0.3,
+					slopeHigh = 0.6
+			} }
+		else 
+			result.terrainAlignmentLists = { {
+				type = "EQUAL",
+				faces =  {}
+			} }
+		end
+		
+		local modes = { }
+		if params.fill then
+			 table.insert(modes, {
+				type = "FILL",
+				key = assert(params.groundType)
+			})
+		end
+		if params.strokeMode and params.strokeMode>0 then
+			 table.insert(modes, {
+				type = assert(strokeModes[params.strokeMode]),
+				key = assert(params.strokeType, "No key: "..tostring(params.strokeType))
+			})
+		end
+		
+		result.groundFaces = {
+			{
+				face = params.faces,
+				modes = modes,
+				loop = (#params.faces>2),
+				alignmentDirMode = "WORLD",
+				alignmentDir = a,--{ math.cos(), math.sin() }
+			},
+		}
+		
+		-- TRICK to prevent the game engine from cutting out ground face
+		for i,point in pairs(params.faces) do
+			result.models[#result.models+1] = {
+				id = paver.markerId,
+				transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, point[1], point[2], 0, 1 }
+			}
+		end
+		
+		-- result.name = "Paver: "..params.groundType  -- this would be too easy...
+		
+		return result
+		end)
+		
+		if status then
+			return result
+		else
+			print("PAVER - ERROR: ", result)
+			return {models={}}  -- return empty thing that doesn't crash the game
+		end
+		
+	end,
+}
+end

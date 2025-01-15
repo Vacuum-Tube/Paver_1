@@ -1,0 +1,49 @@
+function data()
+    return {
+        type = "ASSET_DEFAULT",
+        buildMode = "MULTI",
+        categories = {"misc"},
+        availability = {
+            yearFrom = 0,
+            yearTo = 0
+        },
+        order = 0,
+        description = {
+            name = _("paver_con_name"),
+            description = _("paver_con_desc")
+        },
+        skipCollision = true,
+        autoRemovable = true,
+        params = {
+            {
+                key = "paver_groundTex",
+                name = _("paver_con_param_groundTex"),
+                values =  {"ERROR - postRunFn not executed"},
+				uiType = "COMBOBOX",
+            },
+            {
+                key = "paver_groundTex_mode",
+                name = _("Mode"),
+                values =  {
+					"FILL",
+					"STROKE",
+					"STROKE_INNER",
+					"STROKE_OUTER",
+				},
+            },
+            {
+                key = "paver_groundTex_check",
+                name = _("paver_con_param_groundTex_check"),
+				tooltip = _("paver_con_param_groundTex_tt"),
+				uiType = "CHECKBOX",
+            },
+            {
+                key = "paver_dummy",
+                name = _("paver_con_param"),
+                values = {_("paver_con_value")},            
+            },
+        },
+        -- updateFn = function(params)
+        -- end
+    }
+end

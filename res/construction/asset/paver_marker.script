@@ -1,0 +1,71 @@
+local transf = require "transf"
+local vec3 = require "vec3"
+
+local paver = require "paver.main"
+
+local strokeModes = {
+	"FILL",
+	"STROKE",
+	"STROKE_INNER",
+	"STROKE_OUTER",
+}
+
+function data()
+return {
+	updateFn = function(constrParams, scriptParams)
+	
+		local result = { }
+		
+		result.models = {
+			{
+				id = paver.markerId,
+				transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
+			}
+		}
+		
+		result.terrainAlignmentLists = { {
+			type = "EQUAL",
+			faces = {}
+		} }
+		
+		if not constrParams.paver_groundTex_mode then
+			print("params.paver_groundTex_mode missing !")
+			return result
+		end
+		if not constrParams.paver_groundTex then
+			print("params.paver_groundTex missing !")
+			return result
+		end
+		
+		if constrParams.paver_groundTex_check>0 then  -- show preview
+			result.groundFaces = {
+				{
+					face = {{20,-20}, {20,20}, {-20,20}, {-20,-20}},
+					modes = {
+						{
+							type = strokeModes[constrParams.paver_groundTex_mode+1],
+							key = scriptParams.groundTexTypes[constrParams.paver_groundTex+1]
+						}
+					},
+					loop = true,
+					alignmentDirMode = "WORLD",
+				}
+			}
+		else  -- add groundFace anyway to ensure a con is created
+			result.groundFaces = {
+				{
+					face = {{0,0}, {.01,0}, {.01,.01}},
+					modes = {
+						{
+							type = "FILL",
+							key = "none.lua",
+						}
+					}
+				}
+			}
+		end
+		
+		return result
+	end,
+}
+end
