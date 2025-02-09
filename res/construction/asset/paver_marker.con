@@ -9,17 +9,18 @@ function data()
         },
         order = 0,
         description = {
-            name = _("paver_con_name"),
-            description = _("paver_con_desc")
+            name = _("con_name"),
+            description = _("con_desc")
         },
         skipCollision = true,
         autoRemovable = true,
         params = {
             {
                 key = "paver_groundTex",
-                name = _("paver_con_param_groundTex"),
+                name = _("con_groundTex"),
                 values =  {"ERROR - postRunFn not executed"},
 				uiType = "COMBOBOX",
+				tooltip = _("con_param_tt"),
             },
             {
                 key = "paver_groundTex_mode",
@@ -30,17 +31,19 @@ function data()
 					"STROKE_INNER",
 					"STROKE_OUTER",
 				},
+				tooltip = _("con_param_tt"),
             },
             {
                 key = "paver_groundTex_check",
-                name = _("paver_con_param_groundTex_check"),
-				tooltip = _("paver_con_param_groundTex_tt"),
+                name = _("con_groundTex_check"),
+				tooltip = _("con_param_tt"),
 				uiType = "CHECKBOX",
             },
             {
                 key = "paver_dummy",
-                name = _("paver_con_param"),
-                values = {_("paver_con_value")},            
+                name = _("con_param"),
+                values = {_("con_value")},
+				tooltip = _("con_desc")
             },
         },
         -- updateFn = function(params)

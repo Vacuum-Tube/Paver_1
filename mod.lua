@@ -3,10 +3,10 @@ function data()
 		info = {
 			minorVersion = -1,
 			severityAdd = "NONE",
-			severityRemove = "NONE", 
-			name = "Paver",
+			severityRemove = "WARNING", 
+			name = _("mod_name"),
 			description = _("mod_desc"),
-			tags = { "Script Mod" },
+			tags = { "Script Mod", "Ground Texture" },
 			authors = {
 				{
 					name = "VacuumTube",

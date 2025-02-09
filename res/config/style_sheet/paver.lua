@@ -7,7 +7,7 @@ function data()
 	a("!PaverButton", {
 		backgroundColor = ssu.makeColor(83, 151, 198, 200),
 		borderColor = ssu.makeColor(0, 0, 0, 150),
-		margin = { 5, 0, 5, 0 },
+		margin = { 2, 15, 10, 15 },
 		padding = { 0, 10, 0, 10 },
 	})
 	a("!PaverButton:hover", {

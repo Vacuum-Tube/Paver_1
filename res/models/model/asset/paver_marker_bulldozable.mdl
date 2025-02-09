@@ -1,0 +1,27 @@
+function data()
+	return {
+		boundingInfo = {
+			bbMax = { 10, 10, 10, },
+			bbMin = { -10, -10, -10, },
+		},
+		lods = {
+			{
+				node = {
+					children = {
+						{
+							materials = { "asset/rocks/rock_cracked_01/rock_cracked_01.mtl", },
+							mesh = "asset/rocks/rock_cracked_01/rock_cracked_01_lod2_lod2.msh", 
+							transf = { .4, 0, 0, 0, 0, .4, 0, 0, 0, 0, .4, 0, 0, 0, 0, 1, },
+						},
+					},
+					transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+				},
+				static = false,
+				visibleFrom = 0,
+				visibleTo = 35,
+			},
+		},
+		metadata = { },
+		version = 1,
+	}
+end

@@ -7,17 +7,23 @@ local gtex_rep = require "paver.gtex_rep"
 
 local paver = {
 	markerId = "asset/paver_marker.mdl",
+	markerIdbulldozable = "asset/paver_marker_bulldozable.mdl",
 	conFileMarker = "asset/paver_marker.con",
 	conFileResult = "asset/paver_result.con",
 	zonecolor = {0.8, 0.8, 0.8, 0.7},
 	zonecolorBad = {0.8, 0, 0, 1},
-	params = require "paver.params",
 	modes = {
 		"FILL",
 		"STROKE",
 		"STROKE_INNER",
 		"STROKE_OUTER",
 	},
+	modesText = {
+		_("Fill only"),
+		_("Stroke"),
+		_("Stroke inner"),
+		_("Stroke outer"),
+	}
 }
 
 function paver.getPolygon(markers)
@@ -50,7 +56,6 @@ function paver.updateZone(markers)
 end
 
 function paver.updateMarkerPreviews(markers,gtype)
-	print("update Paver markers", gtype)
 	for i = 1, #markers do
 		local id = markers[i].id
 		if api.engine.entityExists(id) then
@@ -87,9 +92,18 @@ function paver.manualMarkerCleanup()
 end
 
 function paver.pave(polygon, groundType, fill, strokeMode, strokeType)
---   MultiPolygon?
-
-    
+	assert(type(groundType)=="string")
+	if fill==nil then
+		fill = true
+	end
+	if strokeMode==nil then
+		strokeMode = 0
+	end
+	assert(strokeMode<4)
+	if strokeMode>0 then
+		assert(type(strokeType)=="string", "No strokeType")
+	end
+	
 	if #polygon < 2 then  
 		print("#polygon < 2 !")
 		return
@@ -98,45 +112,41 @@ function paver.pave(polygon, groundType, fill, strokeMode, strokeType)
 		print("Polygon self intersecting !")
 		return
 	end
-	
-	assert(type(groundType)=="string")
-	if fill==nil then
-		fill = true
-	end
-	if strokeMode==nil then
-		strokeMode = 0
-	end
-	if strokeMode>0 then
-		assert(type(strokeType)=="string", "No strokeType")
-	end
-	
     if polygon:IsClockwise() then
-        polygon = polygon:reverse()  -- clockwise faces gets triangled outlines for some reason
-    end
-	
+        polygon = polygon:reverse()  -- clockwise face gets triangled outlines for some reason
+    end	
 	local center = polygon:getCenter()
 	local center_z = api.engine.terrain.getHeightAt(api.type.Vec2f.new(center[1], center[2]))
 	polygon:makeCentered()
 	
 	local transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, center[1], center[2], center_z, 1}
 	local params = {
-		faces = polygon, 
+		polygon = polygon, 
 		groundType = groundType,
 		fill = fill,
 		strokeMode = strokeMode,
 		strokeType = strokeType,
-	}
-    
+	}    
+	local entity
 	local status,res	= pcall(function()
-		local entity = game.interface.buildConstruction(paver.conFileResult, params, transf)
+		entity = game.interface.buildConstruction(paver.conFileResult, params, transf)
 		game.interface.setPlayer(entity, game.interface.getPlayer())
-		game.interface.setName(entity, "Paver: "..groundType)
+		paver.setConName(entity, params)
 	end)
 	if status then
-		print("Paver: Successfully built con with "..#polygon.." markers")
+		-- print("Paver: Successfully built con with "..#polygon.." markers")
 	else
 		print("PAVER - ERROR: ", res)
 	end
+	return entity
+end
+
+function paver.setConName(id, params)
+	local name = paver.typesinfo.name[params.groundType] or params.groundType
+	if not params.fill then
+		name = "Stroke: "..(paver.typesinfo.name[params.strokeType] or params.strokeType)
+	end
+	game.interface.setName(id, "Paver - "..name)
 end
 
 function paver.initGroundTexRep()
@@ -144,25 +154,26 @@ function paver.initGroundTexRep()
 end
 
 function paver.postRunFn(settings, modsettings)
-	paver.initGroundTexRep()
+	local types_con, typesinfo = gtex_rep.initGroundTexRep{forconpreviewonly=true}
 	local paver_con_marker = api.res.constructionRep.get(api.res.constructionRep.find(paver.conFileMarker))
 	local paver_con_res = api.res.constructionRep.get(api.res.constructionRep.find(paver.conFileResult))
 	for _,p in pairs(paver_con_marker.params) do 
 		if p.key=="paver_groundTex" then 
-			p.values = paver.types
+			p.values = types_con
 		end
 	end
-	for _,p in pairs(paver_con_res.params) do 
-		if p.key=="groundType" then 
-			p.values = paver.types
-		end
-		if p.key=="strokeType" then 
-			p.values = paver.types
-		end
-	end
+	-- for _,p in pairs(paver_con_res.params) do 
+		-- if p.key=="groundType" then 
+			-- p.values = paver.types
+		-- end
+		-- if p.key=="strokeType" then 
+			-- p.values = paver.types
+		-- end
+	-- end
 	paver_con_marker.updateScript.fileName = "construction/asset/paver_marker.updateFn"
 	paver_con_marker.updateScript.params = {
-		groundTexTypes = paver.types,
+		groundTexTypes = types_con,
+		gtexInfos = typesinfo,
 	}
 end
 

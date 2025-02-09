@@ -12,18 +12,18 @@ function data()
 		lods = {
 			{
 				node = {
-					children = {
-						{
-							materials = { "street/transparent.mtl", }, --{ "asset/rock_detail2.mtl", },
-							mesh = "cube_1x1_lod0.msh", --"asset/rock_2_1_lod_0.msh",
-							transf = { 0.01, 0, 0, 0, 0, 0.01, 0, 0, 0, 0, 0.01, 0, 0, 0, 0, 1, },
-						},
-					},
-					transf = { 0.01, 0, 0, 0, 0, 0.01, 0, 0, 0, 0, 0.01, 0, 0, 0, 0, 1, },
+					-- children = {
+						-- {
+							-- materials = { "street/transparent.mtl", }, --{ "asset/rock_detail2.mtl", },
+							-- mesh = "cube_1x1_lod0.msh", --"asset/rock_2_1_lod_0.msh",
+							-- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+						-- },
+					-- },
+					-- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
 				},
 				static = false,
 				visibleFrom = 0,
-				visibleTo = 2,
+				visibleTo = 0,
 			},
 		},
 		metadata = { },

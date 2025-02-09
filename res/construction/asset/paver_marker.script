@@ -1,5 +1,3 @@
-local transf = require "transf"
-local vec3 = require "vec3"
 
 local paver = require "paver.main"
 
@@ -37,14 +35,15 @@ return {
 			return result
 		end
 		
-		if constrParams.paver_groundTex_check>0 then  -- show preview
+		local gtexkey = scriptParams.groundTexTypes[constrParams.paver_groundTex+1]
+		if constrParams.paver_groundTex_check>0 and scriptParams.gtexInfos.terrainTexDesc[gtexkey] then  -- show preview
 			result.groundFaces = {
 				{
 					face = {{20,-20}, {20,20}, {-20,20}, {-20,-20}},
 					modes = {
 						{
 							type = strokeModes[constrParams.paver_groundTex_mode+1],
-							key = scriptParams.groundTexTypes[constrParams.paver_groundTex+1]
+							key = gtexkey,
 						}
 					},
 					loop = true,

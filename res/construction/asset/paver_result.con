@@ -1,3 +1,4 @@
+local vec2 = require"vec2"
 local paver = require "paver.main"
 
 local strokeModes = {
@@ -22,60 +23,115 @@ return {
 	skipCollision = true,
 	autoRemovable = false,
 	params = {
-		{
-			key = "groundType",
-			name = _("Ground Texture Type"),
-			values =  {"ERROR - postRunFn not executed"},
-			uiType = "COMBOBOX",
-		},
-		{
-			key = "strokeMode",
-			name = _("Stroke Mode"),
-			values =  {
-				"FILL",
-				"STROKE",
-				"STROKE_INNER",
-				"STROKE_OUTER",
-			},
-		},
-		{
-			key = "fill",
-			name = _("Fill"),
-			uiType = "CHECKBOX",
-		},
-		{
-			key = "strokeType",
-			name = _("Ground Texture Type"),
-			values =  {"ERROR - postRunFn not executed"},
-			uiType = "COMBOBOX",
-		},
-		{
-			key = "terrainAlignment",
-			name = _("Terrain Alignment"),
-			uiType = "CHECKBOX",
-		},
+		-- UNFORTUNATELY UPGRADING DOES NOT WORK
+		-- {
+			-- key = "groundType",
+			-- name = _("Ground Texture Type"),
+			-- values =  {"ERROR - postRunFn not executed"},
+			-- uiType = "COMBOBOX",
+		-- },
+		-- {
+			-- key = "strokeMode",
+			-- name = _("Stroke Mode"),
+			-- values =  {
+				-- "FILL",
+				-- "STROKE",
+				-- "STROKE_INNER",
+				-- "STROKE_OUTER",
+			-- },
+		-- },
+		-- {
+			-- key = "fill",
+			-- name = _("Fill"),
+			-- uiType = "CHECKBOX",
+		-- },
+		-- {
+			-- key = "strokeType",
+			-- name = _("Ground Texture Type"),
+			-- values =  {"ERROR - postRunFn not executed"},
+			-- uiType = "COMBOBOX",
+		-- },
+		-- {
+			-- key = "terrainAlignment",
+			-- name = _("Terrain Alignment"),
+			-- uiType = "CHECKBOX",
+		-- },
 	},
 	updateFn = function(params)
 	
-	local status,result	= pcall(function()
+	local status,result = pcall(function()
 		
-		assert(params.faces, "no params.faces")
+		assert(params.polygon, "no params.polygon")
 		
 		local result = {
-			models = {
-				{
-					id = paver.markerId,
-					transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
-				}
-			}
+			models = {}
+		}
+				
+		local modes = { }
+		if params.fill then
+			table.insert(modes, {
+				type = "FILL",
+				key = assert(params.groundType)
+			})
+		end
+		if params.strokeMode and params.strokeMode>0 then
+			table.insert(modes, {
+				type = assert(strokeModes[params.strokeMode+1]),
+				key = assert(params.strokeType, "No params.strokeType key")
+			})
+			if #params.polygon>2 and not params.fill then
+				table.insert(modes, {  -- else not clickable
+					type = "FILL",
+					key = "none.lua"
+				})
+			end
+		end
+		
+		result.groundFaces = {
+			{
+				face = params.polygon,
+				modes = modes,
+				loop = (#params.polygon>2),
+				alignmentDirMode = "WORLD", --params.orientationAngle and "OBJECT" or "WORLD",
+				alignmentDir = params.orientationAngle and {
+					math.cos(math.rad(params.orientationAngle)),
+					math.sin(math.rad(params.orientationAngle)),
+				} or nil,
+				alignmentOffsetMode = "WORLD", -- params.alignmentOffset and "OBJECT" or "WORLD",
+				alignmentOffset = params.alignmentOffset and {
+					params.alignmentOffset[1] or 0,
+					params.alignmentOffset[2] or 0,
+				} or nil,
+			},
 		}
 		
+		-- TRICK to prevent the game engine from cutting out ground face
+		for i,point in pairs(params.polygon) do
+			table.insert(result.models, {
+				id = paver.markerId,
+				transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, point[1], point[2], 0, 1 }
+			})
+		end
+		
 		if params.terrainAlignment == 1 then
-			result.terrainAlignmentLists = {  {
-					type = "EQUAL",
-					faces = { params.faces },
-					slopeLow = 0.3,
-					slopeHigh = 0.6
+			local terrAlignPoly = table.copy(params.polygon)
+			if #terrAlignPoly==2 then  -- create thin rectangle
+				local v1 = vec2.new(terrAlignPoly[1][1], terrAlignPoly[1][2])
+				local v2 = vec2.new(terrAlignPoly[2][1], terrAlignPoly[2][2])
+				local ortho = vec2.normalize(vec2.rotate90(vec2.sub(v1, v2)))
+				local v1a = vec2.add(v1, vec2.mul(0.5, ortho))
+				local v2a = vec2.add(v2, vec2.mul(0.5, ortho))
+				table.insert(terrAlignPoly, {v2a.x, v2a.y})
+				table.insert(terrAlignPoly, {v1a.x, v1a.y})
+			end
+			for i,point in pairs(terrAlignPoly) do
+				point[3] = 0
+			end
+			result.terrainAlignmentLists = { {
+				type = "EQUAL",  -- LESS, GREATER
+				faces = { terrAlignPoly },
+				slopeLow = params.emankmentLow or 0.3,
+				slopeHigh = params.emankmentHigh or 0.6
 			} }
 		else 
 			result.terrainAlignmentLists = { {
@@ -84,36 +140,17 @@ return {
 			} }
 		end
 		
-		local modes = { }
-		if params.fill then
-			 table.insert(modes, {
-				type = "FILL",
-				key = assert(params.groundType)
+		if #params.polygon==2 then
+			table.insert(result.models, {  -- to allow bulldoze
+				id = paver.markerIdbulldozable,
+				transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
 			})
-		end
-		if params.strokeMode and params.strokeMode>0 then
-			 table.insert(modes, {
-				type = assert(strokeModes[params.strokeMode]),
-				key = assert(params.strokeType, "No key: "..tostring(params.strokeType))
+			table.insert(result.terrainAlignmentLists, {  -- to prevent stone under terrain
+				type = "EQUAL",
+				faces = { { {.1,.1,0}, {-.1,.1,0}, {-.1,-.1,0}, {.1,-.1,0} } },
+				slopeLow = params.emankmentLow or 0.3,
+				slopeHigh = params.emankmentHigh or 0.6
 			})
-		end
-		
-		result.groundFaces = {
-			{
-				face = params.faces,
-				modes = modes,
-				loop = (#params.faces>2),
-				alignmentDirMode = "WORLD",
-				alignmentDir = a,--{ math.cos(), math.sin() }
-			},
-		}
-		
-		-- TRICK to prevent the game engine from cutting out ground face
-		for i,point in pairs(params.faces) do
-			result.models[#result.models+1] = {
-				id = paver.markerId,
-				transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, point[1], point[2], 0, 1 }
-			}
 		end
 		
 		-- result.name = "Paver: "..params.groundType  -- this would be too easy...
