@@ -71,13 +71,13 @@ return {
 		if params.fill then
 			table.insert(modes, {
 				type = "FILL",
-				key = assert(params.groundType)
+				key = params.disable and "none.lua" or assert(params.groundType)
 			})
 		end
 		if params.strokeMode and params.strokeMode>0 then
 			table.insert(modes, {
 				type = assert(strokeModes[params.strokeMode+1]),
-				key = assert(params.strokeType, "No params.strokeType key")
+				key = params.disable and "none.lua" or  assert(params.strokeType, "No params.strokeType key")
 			})
 			if #params.polygon>2 and not params.fill then
 				table.insert(modes, {  -- else not clickable

@@ -207,11 +207,14 @@ end
 
 function Polygon:makeCentered()
 	local center = self:getCenter()
+	local points = {}
     for i = 1, #self do
-        self[i][1] = self[i][1] - center[1]
-        self[i][2] = self[i][2] - center[2]
-        -- self[i][3] = self[i][3] - center[3]
+		points[#points + 1] = {
+			self[i][1] - center[1],
+			self[i][2] - center[2],
+		}
     end
+	return Polygon:Create(points)
 end
 
 function Polygon:IsSelfIntersecting()

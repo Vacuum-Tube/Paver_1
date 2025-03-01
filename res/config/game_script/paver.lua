@@ -42,6 +42,19 @@ local function createWindow(upgrade, id)
 	headerLayout:addItem(stroke_cbox)
 	local check_fill = api.gui.comp.CheckBox.new("Fill")
 	headerLayout:addItem(check_fill)
+	local check_active = api.gui.comp.CheckBox.new("Disable")
+	check_active:setTooltip("Temporary disable of texture")
+	if upgrade then
+		headerLayout:addItem(api.gui.comp.TextView.new(""))
+		headerLayout:addItem(check_active)
+		if type(params.disable)=="boolean" then
+			check_active:setSelected(params.disable, false)
+		end
+		check_active:onToggle(function(toggle)
+			params.disable = toggle
+			sendScriptEvent("upgrade", {id = id, params = params})
+		end)
+	end
 	local comp = api.gui.comp.Component.new("")
 	comp:setLayout(headerLayout)
 	boxLayout:addItem(comp)
@@ -50,6 +63,7 @@ local function createWindow(upgrade, id)
 	list:setVerticalScrollBarPolicy(api.gui.comp.ScrollBarPolicy.ALWAYS_ON)
 	list:setHorizontalScrollBarPolicy(api.gui.comp.ScrollBarPolicy.ALWAYS_OFF)
 	list:setMaximumSize(api.gui.util.Size.new(220, -1))
+	list:setFocusable(false)
 	local list2 = api.gui.comp.List.new(true, api.gui.util.Orientation.VERTICAL, true)
 	list2:setVerticalScrollBarPolicy(api.gui.comp.ScrollBarPolicy.ALWAYS_ON)
 	list2:setHorizontalScrollBarPolicy(api.gui.comp.ScrollBarPolicy.ALWAYS_OFF)
@@ -59,6 +73,9 @@ local function createWindow(upgrade, id)
 			local text = api.gui.comp.TextView.new(paver.typesinfo.name[groundTex] or groundTex)
 			-- text:setTooltip(groundTex)
 			local boxlayout = api.gui.layout.BoxLayout.new("HORIZONTAL")
+			local t = api.gui.comp.TextView.new(" ")  -- UGLY WORKAROUND to avoid jumping in the list when clicking letters (there is some kind of automatic element search)
+			t:setVisible(false,false)
+			boxlayout:addItem(t)
 			boxlayout:addItem(text)
 			local comp = api.gui.comp.Component.new("")
 			comp:setLayout(boxlayout)
@@ -123,7 +140,7 @@ local function createWindow(upgrade, id)
 		end)
 		-- layoutInfos:addItem(sliderComp)
 		
-		local check_terrAlign = api.gui.comp.CheckBox.new("Make Flat")
+		local check_terrAlign = api.gui.comp.CheckBox.new(_("Make Terrain Flat"))
 		layoutInfos:addItem(check_terrAlign)
 		check_terrAlign:setSelected(params.terrainAlignment==1, false)
 		check_terrAlign:onToggle(function(toggle)
@@ -249,6 +266,7 @@ local function createWindow(upgrade, id)
 			end
 		else
 			list2:select((sgtype or 1) - 1, false)
+			params.strokeType = paver.types[sgtype or 1]
 		end
 		list:onSelect(function(idx)
 			local gtexkey = paver.types[idx + 1]
@@ -298,6 +316,9 @@ local function createWindow(upgrade, id)
 			print("Paver existing strokeMode not found", id, params.strokeMode)
 		end
 		check_fill:setSelected(params.fill, false)
+		if #params.polygon==2 and params.fill==false then
+			check_fill:setEnabled(false)
+		end
 	end
 	
 	check_fill:onToggle(function(toggle)
@@ -317,7 +338,7 @@ local function createWindow(upgrade, id)
 	
 	-- ### Window
 	
-	local window = api.gui.comp.Window.new(upgrade and (_("Paver Upgrader").." Entity: "..id) or _("Paver (BETA)"), boxLayout)
+	local window = api.gui.comp.Window.new(upgrade and (_("Paver Upgrader").." Entity: "..id) or _("Paver"), boxLayout)
 	window:addHideOnCloseHandler()
 	window:setPosition(75, 75)
 	window:setMaximumSize(api.gui.util.Size.new(-1, 500))
@@ -342,6 +363,7 @@ local function createWindow(upgrade, id)
 			})
 			window:close()
 		end)
+		windowData.created = true
 	end
 	
 end
@@ -355,12 +377,14 @@ function data()
         save = function()
             return state
         end,
+		update = function()
+			if not init then 
+				paver.initGroundTexRep()
+				init = true
+			end
+        end,
         handleEvent = function(src, id, name, param)
             if id == "__paverEvent__" then
-				if not init then 
-					paver.initGroundTexRep()
-					init = true
-				end
 				if name == "plan" then
 					table.insert(state.markers, param.marker)
 					if param.gtype then
@@ -379,7 +403,7 @@ function data()
 					paver.reset(state.markers)
 					state.markers = {}
 				elseif name=="upgrade" then
-					print("Paver Upgrade", param.id)
+					-- print("Paver Upgrade", param.id)
 					local status,msg = pcall(function()
 						game.interface.upgradeConstruction(param.id, paver.conFileResult, param.params)
 						paver.setConName(param.id, param.params)
@@ -393,11 +417,11 @@ function data()
         load = function(data)
 			if data and #state.markers ~= #data.markers then
 				state.markers = data.markers
-				if windowData then
+				if windowData and windowData.created then
 					windowData.markersText:setText(string.format("%s: %d", "Marker", #state.markers))
 				end
 				local polygon = paver.updateZone(state.markers)
-				if #state.markers >= 2 and windowData then
+				if #state.markers >= 2 and windowData and windowData.created then
 					windowData.acceptButton:setEnabled(true)
 					if #state.markers==2 then
 						windowData.markersText:setText("Marker: 2 (only Stroke mode)")
@@ -432,7 +456,7 @@ function data()
 						local status,msg = pcall(createWindow)
 						if not status then
 							print("PAVER - ERROR: "..msg)
-							ui.attentionWindow("PAVER - ERROR", msg)
+							ui.attentionWindow("PAVER - ERROR", msg, nil, nil, false)
 						end
 					end
 				end
@@ -446,7 +470,7 @@ function data()
 						local status,msg = pcall(createWindow, true, entity)
 						if not status then
 							print("PAVER - ERROR: "..msg)
-							ui.attentionWindow("PAVER - ERROR", msg)
+							ui.attentionWindow("PAVER - ERROR", msg, nil, nil, false)
 						end
 					end
 				end

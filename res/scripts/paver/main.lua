@@ -83,7 +83,7 @@ function paver.reset(markers)
 end
 
 function paver.manualMarkerCleanup()
-    local fields = game.interface.getEntities({pos = {0,0}, radius = 1e42}, {type = "CONSTRUCTION", fileName = paver.conFileResult})
+    local fields = game.interface.getEntities({pos = {0,0}, radius = 1e42}, {type = "CONSTRUCTION", fileName = paver.conFileMarker})
     for i = 1, #fields do
         if api.engine.entityExists(fields[i]) then
             game.interface.bulldoze(fields[i])
@@ -93,6 +93,17 @@ end
 
 function paver.pave(polygon, groundType, fill, strokeMode, strokeType)
 	assert(type(groundType)=="string")
+	if not groundType:ends(".lua") then
+		if not paver.typesinfo.fullName[groundType] then
+			print("Unknown ground type: "..groundType)
+			return
+		end
+		groundType = paver.typesinfo.fullName[groundType]
+	end
+	if api.res.groundTextureRep.find(groundType)<0 then
+		print("Unknown ground type: "..groundType)
+		return
+	end
 	if fill==nil then
 		fill = true
 	end
@@ -102,8 +113,18 @@ function paver.pave(polygon, groundType, fill, strokeMode, strokeType)
 	assert(strokeMode<4)
 	if strokeMode>0 then
 		assert(type(strokeType)=="string", "No strokeType")
-	end
-	
+		if not strokeType:ends(".lua") then
+			if not paver.typesinfo.fullName[strokeType] then
+				print("Unknown stroke type: "..strokeType)
+				return
+			end
+			strokeType = paver.typesinfo.fullName[strokeType]
+		end
+		if api.res.groundTextureRep.find(strokeType)<0 then
+			print("Unknown stroke type: "..strokeType)
+			return
+		end
+	end	
 	if #polygon < 2 then  
 		print("#polygon < 2 !")
 		return
@@ -112,12 +133,13 @@ function paver.pave(polygon, groundType, fill, strokeMode, strokeType)
 		print("Polygon self intersecting !")
 		return
 	end
+	
     if polygon:IsClockwise() then
         polygon = polygon:reverse()  -- clockwise face gets triangled outlines for some reason
     end	
 	local center = polygon:getCenter()
 	local center_z = api.engine.terrain.getHeightAt(api.type.Vec2f.new(center[1], center[2]))
-	polygon:makeCentered()
+	polygon = polygon:makeCentered()
 	
 	local transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, center[1], center[2], center_z, 1}
 	local params = {
@@ -126,7 +148,7 @@ function paver.pave(polygon, groundType, fill, strokeMode, strokeType)
 		fill = fill,
 		strokeMode = strokeMode,
 		strokeType = strokeType,
-	}    
+	}
 	local entity
 	local status,res	= pcall(function()
 		entity = game.interface.buildConstruction(paver.conFileResult, params, transf)
@@ -136,7 +158,7 @@ function paver.pave(polygon, groundType, fill, strokeMode, strokeType)
 	if status then
 		-- print("Paver: Successfully built con with "..#polygon.." markers")
 	else
-		print("PAVER - ERROR: ", res)
+		print("Paver - ERROR: ", res)
 	end
 	return entity
 end
@@ -154,7 +176,7 @@ function paver.initGroundTexRep()
 end
 
 function paver.postRunFn(settings, modsettings)
-	local types_con, typesinfo = gtex_rep.initGroundTexRep{forconpreviewonly=true}
+	local types_con, typesinfo = gtex_rep.initGroundTexRep()
 	local paver_con_marker = api.res.constructionRep.get(api.res.constructionRep.find(paver.conFileMarker))
 	local paver_con_res = api.res.constructionRep.get(api.res.constructionRep.find(paver.conFileResult))
 	for _,p in pairs(paver_con_marker.params) do 
@@ -162,14 +184,6 @@ function paver.postRunFn(settings, modsettings)
 			p.values = types_con
 		end
 	end
-	-- for _,p in pairs(paver_con_res.params) do 
-		-- if p.key=="groundType" then 
-			-- p.values = paver.types
-		-- end
-		-- if p.key=="strokeType" then 
-			-- p.values = paver.types
-		-- end
-	-- end
 	paver_con_marker.updateScript.fileName = "construction/asset/paver_marker.updateFn"
 	paver_con_marker.updateScript.params = {
 		groundTexTypes = types_con,

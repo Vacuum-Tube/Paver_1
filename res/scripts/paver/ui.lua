@@ -1,13 +1,14 @@
 local ui = {}
 
-function ui.attentionWindow(title,msg,icon,highlight)
+function ui.attentionWindow(title,msg,icon,highlight,size)
 	local window = api.gui.comp.Window.new(title, api.gui.comp.TextView.new(msg))
 	window:addHideOnCloseHandler()
 	window:setIcon(icon or "ui/icons/windows/attention.tga")
 	local uiSize = window:getParent():getContentRect()
-	local newSize = api.gui.util.Size.new(300, 100)
-	window:setSize(newSize)
-	-- window:setVisible(false, false)
+	if size~=false then
+		local newSize = api.gui.util.Size.new(size and size.h or 300, size and size.w or 100)
+		window:setSize(newSize)
+	end
 	window:setPosition(0, 0) -- TRICK opens the window 'somewhere' to get the scaled size
 	local winSize = window:getContentRect() -- now we have got the scaled size
 	local x = math.floor((uiSize.w - winSize.w) * .5 + .5)

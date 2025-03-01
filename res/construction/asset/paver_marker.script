@@ -47,7 +47,6 @@ return {
 						}
 					},
 					loop = true,
-					alignmentDirMode = "WORLD",
 				}
 			}
 		else  -- add groundFace anyway to ensure a con is created

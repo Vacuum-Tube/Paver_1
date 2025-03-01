@@ -1,12 +1,12 @@
 function data()
 	return {
 		info = {
-			minorVersion = -1,
+			minorVersion = 0,
 			severityAdd = "NONE",
 			severityRemove = "WARNING", 
 			name = _("mod_name"),
 			description = _("mod_desc"),
-			tags = { "Script Mod", "Ground Texture" },
+			tags = { "Script Mod", "Ground Texture", "Brush Asset" },
 			authors = {
 				{
 					name = "VacuumTube",

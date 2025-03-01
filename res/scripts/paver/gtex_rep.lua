@@ -1,14 +1,20 @@
 local g = {}
 
-local mods = {
+local mods = { -- defines the order
 	"nep",
 	"rtp",
+	"ingo_pavers",
+	"farm_land_textures_jt85",
+	"farmland_textures_qu99",
 	"mt_bodentex1",
 	"mt_bodentex2",
 	"mt_bodentex3",
 	"mt_bodentex4",
+	"ah_pflasterpaket3",
+	"bloody_cobblestone",
 	"ingo_rocks_fields",
 	"ingo_vegetation",
+	"ingo_vegetation_ext",
 	"mt_sexy_vegetation",
 	"mt_sexy_vegetation2",
 }
@@ -30,12 +36,13 @@ function g.initGroundTexRep(options)
 		name = {},
 		icon = {},
 		tooltip = {},
+		fullName = {},
 	}
 	local groundTexturesRep = api.res.groundTextureRep.getAll()
 	for idx,fileName in pairs(groundTexturesRep) do
 		if api.res.groundTextureRep.isVisible(idx) and not g.filter(g.vanillaHide, fileName) then
 			local groundTex = api.res.groundTextureRep.get(idx)
-			if groundTex.matIndexMap:size()>0 then
+			-- if groundTex.matIndexMap:size()>0 then
 				local terrainTexDesc = toString(groundTex.matIndexMap)
 				info.terrainTexDesc[fileName] = terrainTexDesc
 				info.size[fileName] = string.format("%s x %s", groundTex.texSize.x, groundTex.texSize.y)
@@ -55,22 +62,28 @@ function g.initGroundTexRep(options)
 					if not found then
 						table.insert(types.paverVanilla, fileName)
 					end
+					groundTex.priority = groundTex.priority+1000000  -- this seems to help in bringing the textures on top of others... but it's still kind of arbitrary
 				else
 					table.insert(types.others, fileName)
 				end
-			end
+			-- end
 		end
 	end
 	local typeslist = {}
 	for z,typ in pairs(types.paverVanilla) do
 		table.insert(typeslist, typ)
-		info.name[typ] = g.paverVanillaConfig.name[typ:match("^paver/([^/]+)%.lua$")]
-		info.icon[typ] = string.format("ui/paver/previews/%s.tga", typ:match("^paver/([^/]+)%.lua$"))
+		local key = typ:match("^paver/([^/]+)%.lua$")
+		info.name[typ] = g.nameStrings[key]
+		info.fullName[key] = typ
+		info.icon[typ] = string.format("ui/paver/previews/%s.tga", key)
 	end
 	table.insert(typeslist, "===  Mix  ===")
-	info.tooltip["===  Mix  ==="] = "Some custom ground texture files from the vanilla folder. Can be used as a stroke texture."
+	info.tooltip["===  Mix  ==="] = _("mix_tooltip")
 	for z,typ in pairs(types.vanillaMix) do
 		table.insert(typeslist, typ)
+		local key = typ:match("^paver/mix/([^/]+)%.lua$")
+		info.name[typ] = string.format("Mix: %s", key)
+		info.fullName[key] = typ
 	end
 	for z,mod in pairs(mods) do
 		if g.isModActive(mod) then
@@ -79,8 +92,9 @@ function g.initGroundTexRep(options)
 			info.tooltip[heading] = "Textures from mod: "..g.modsStrings.longName[mod]..((g.isModActive(mod)=="maybe") and " (can't determine if active or not)" or "")
 			for _,typ in pairs(types[mod]) do
 				table.insert(typeslist, typ)
-				local groundTex = typ:match("^paver/mod_"..mod.."/([^/]+)%.lua$")
-				info.name[typ] = g.paverVanillaConfig.name[groundTex] or groundTex
+				local key = typ:match("^paver/mod_"..mod.."/([^/]+)%.lua$")
+				info.name[typ] = g.nameStrings[key]
+				info.fullName[key] = typ
 			end
 		end
 	end
@@ -89,25 +103,6 @@ function g.initGroundTexRep(options)
 		-- table.insert(typeslist, typ)
 	-- end
 	return typeslist, info
-end
-
-g.modsStrings = {
-	shortName = {
-		nep = "NEP Textures",
-		rtp = "RTP Textures",
-		ingo_rocks_fields = "Ingo Rocks&Fields",
-		ingo_vegetation = "Ingo Vegetation",
-		mt_bodentex1 = "MT Bodentexturen 1",
-		mt_bodentex2 = "MT Bodentexturen 2",
-		mt_bodentex3 = "MT Bodentexturen 3",
-		mt_bodentex4 = "MT Bodentexturen 4",
-		mt_sexy_vegetation = "Sexy Vegetation",	
-		mt_sexy_vegetation2 = "Sexy Vegetation 2",	
-	},
-	longName = {}
-}
-for z,mod in pairs(mods) do
-	g.modsStrings.longName[mod] = _("mod_"..mod)
 end
 
 function g.isModActive(mod)
@@ -129,8 +124,32 @@ function g.filter(filters, fileName)
 	return false
 end
 
-g.paverVanillaConfig = {
-	name = {
+g.modsStrings = {
+	shortName = {
+		nep = "NEP Textures",
+		rtp = "RTP Textures",
+		ingo_pavers = "Ingo Pavers",
+		ingo_rocks_fields = "Ingo Rocks&Fields",
+		ingo_vegetation = "Ingo Vegetation",
+		ingo_vegetation_ext = "Ingo Vegetation Ext.",
+		mt_bodentex1 = "MT Bodentexturen 1",
+		mt_bodentex2 = "MT Bodentexturen 2",
+		mt_bodentex3 = "MT Bodentexturen 3",
+		mt_bodentex4 = "MT Bodentexturen 4",
+		mt_sexy_vegetation = "Sexy Vegetation",	
+		mt_sexy_vegetation2 = "Sexy Vegetation 2",	
+		ah_pflasterpaket3 = "Alpenheuler Pflaster",
+		bloody_cobblestone = "BloodyRulez Cobblestone",
+		farm_land_textures_jt85 = "Farm land textures (JamesT85Gaming)",
+		farmland_textures_qu99 = "Farmland Textures (Quince99)",
+	},
+	longName = {}
+}
+for z,mod in pairs(mods) do
+	g.modsStrings.longName[mod] = _("mod_"..mod)
+end
+
+g.nameStrings = {
 		-- root
 		dirt = _("Dirt"),
 		forest_ground = _("Forest ground"),
@@ -145,7 +164,8 @@ g.paverVanillaConfig = {
 		rock = _("Rock"),
 		scree = _("Scree"),
 		snow = _("Snow 01"),
-		hole = _("Hole"),
+		zhole = "(".._("Hole")..")",
+		znone = "(".._("None")..")",  --.." (".._("for leveling")..")",
 		
 		-- shared/
 		asphalt1 = _("Asphalt 01"),
@@ -166,14 +186,6 @@ g.paverVanillaConfig = {
 		water_dirty = _("Water Dirty"),
 		wheat = _("Wheat"),
 		
-		-- mix
-		border_dirt = "border_dirt",
-		border_dirt2 = "border_dirt2",
-		border_gravel_dirt = "border_gravel_dirt",
-		border_path = "border_path",
-		country_sidewalk = "country_sidewalk",
-		soil_dirt = "soil_dirt",
-		
 		-- nep
 		dirt_track = _("Dirt Track"),
 		ballast_alternativ = _("Ballast Alternativ"),
@@ -193,6 +205,12 @@ g.paverVanillaConfig = {
 		--rtp
 		rtp_street_gravel = _("RTP - Street gravel"),
 		rtp_red_gravel = _("RTP - Red gravel"),
+		
+		-- ingo pavers
+		ingo_kopfstein = _("Ingo's Cobblestone paving"),
+		ingo_pflaster = _("Ingo's Paving"),
+		ingo_altpflaster = _("Ingo's Old paving"),
+		ingo_naturstein = _("Ingo's Natural stone"),
 		
 		-- ingo fels+acker
 		ingo_fels_moos = _("Ingo's rock with moss"),
@@ -228,6 +246,15 @@ g.paverVanillaConfig = {
 		ingo_wiese_tropical1 = _("Ingo's tropical meadow 1"),
 		ingo_aloevera = _("Ingo's Aloe Vera"),
 		ingo_zyperngras = _("Ingo's Cyprus grass"),
+		
+		-- ingo vegetation ext.
+		ingo_cannabis = _("Ingo's cannabis"),
+		ingo_flachs = _("Ingo's flax"),
+		ingo_gelbeblumen = _("Ingo's yellow flowers"),
+		ingo_kurkuma = _("Ingo's curcuma"),
+		ingo_mohn = _("Ingo's Poppy flowers"),
+		ingo_trockenes_gras = _("Ingo's dry grass"),
+		ingo_wiese_trocken_kurz = _("Ingo's dry meadow - short"),
 		
 		-- Mariotator Bodentexturen 1
 		mt_asphalt_extra1 = "MT Asphalt Extra",
@@ -313,7 +340,43 @@ g.paverVanillaConfig = {
 		mt_mais3 = "MT Mais 3",
 		mt_mais4 = "MT Mais 4",
 		mt_mohn2 = "MT Mohn",
-	},
+		
+		-- Alpenheuler Pflasterpaket 3
+		ah_medieval1 = "Alpenheuler Pflaster 1",
+		ah_medieval2 = "Alpenheuler Pflaster 2",
+		ah_medieval3 = "Alpenheuler Pflaster 3",
+		ah_medieval4 = "Alpenheuler Pflaster 4",
+		ah_medieval5 = "Alpenheuler Pflaster 5",
+		ah_medieval6 = "Alpenheuler Pflaster 6",
+		ah_medieval7 = "Alpenheuler Pflaster 7",
+		ah_medieval8 = "Alpenheuler Pflaster 8",
+		
+		-- BloodyRulez Cobblestone-Textures
+		bloody_cobble_1 = "Cobblestone bright",
+		bloody_cobble_2 = "Cobblestone bright/used",
+		bloody_cobble_3 = "Cobblestone dark", 
+		bloody_cobble_4 = "Cobblestone dark/used", 
+		bloody_cobble_5 = "Waves paving stone bright", 
+		bloody_cobble_6 = "Waves paving stone bright/used", 
+		bloody_cobble_7 = "Waves paving stone dark", 
+		bloody_cobble_8 = "Waves paving stone dark/used", 
+		
+		-- Farm Land Textures (JamesT85Gaming)
+		cultivated1 = "Cultivated 1",
+		cultivated2 = "Cultivated 2",
+		plowedfeidl = "Plowed Feild",
+		wheatfeild = "Wheat Feild",
+		
+		-- Farmland Textures (Quince99)
+		farmland_hops = "Farmland Hops",
+		farmland_hops_large = "Farmland Hops (Large)",
+		farmland_ploughed = "Farmland Ploughed",
+		farmland_potatoes = "Farmland Potatoes",
+		farmland_potatoes_large = "Farmland Potatoes (Large)",
+		farmland_soil = "Farmland Soil (Smooth)",
+		farmland_soil_large = "Farmland Soil (Rough)",
+		farmland_sugarbeet = "Farmland Sugar Beet",
+		farmland_sugarbeet_large = "Farmland Sugar Beet (Large)",
 }
 
 g.vanillaHide = {
