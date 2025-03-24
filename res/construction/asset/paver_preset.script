@@ -1,0 +1,113 @@
+local transf = require "transf"
+local vec3 = require "vec3"
+
+local paver = require "paver.main"
+local paramsDef = require "paver.params"
+
+
+local function createRectangle(width, height)
+	return {
+		{ -height/2, -width/2, 0 },
+		{ height/2, -width/2, 0 }, 
+		{ height/2, width/2, 0 }, 
+		{ -height/2, width/2, 0 }  
+	}
+end
+
+local function createTriangle(width, height)
+	return {
+		{ -height/2, -width/2, 0 },
+		{ height/2, -width/2, 0 }, 
+		{ -height/2, width/2, 0 }  
+	}
+end
+
+local function createCircle(radius, segments)
+	segments = segments or 32
+	local positions = {}
+	for i = 1, segments do
+		local angle = (math.pi * 2 / segments) * i
+		table.insert(positions, { math.cos(angle) * radius, math.sin(angle) * radius, 0 })
+	end
+	return positions
+end
+
+local function createEllipse(width, height, segments)
+    segments = segments or 32
+    local positions = {}
+    for i = 1, segments do 
+        local angle = (math.pi * 2 / segments) * i
+        table.insert(positions, { (math.cos(angle) * height/2), (math.sin(angle) * width/2), 0 })
+    end
+    return positions
+end
+
+
+function data()
+return {
+	updateFn = function(constrParams, scriptParams)
+		
+		local result = { 
+			models = { }
+		}
+		
+		local width = paramsDef.width.getValue(constrParams)
+		local height = paramsDef.height.getValue(constrParams)
+		if paramsDef.height.getIndex(constrParams)==0 then
+			height = width
+		end
+		
+		local poly
+		if constrParams.paver_shape==0 then
+			poly = createRectangle(width, height)
+		elseif constrParams.paver_shape==1 then
+			poly = createTriangle(width, height)
+		elseif constrParams.paver_shape==2 then
+			poly = createEllipse(width, height)
+		else
+			error("Invalid shape !")
+		end
+		
+		local gtexkey = scriptParams.groundTexTypes[constrParams.paver_groundTex+1]
+		if not scriptParams.gtexInfos.terrainTexDesc[gtexkey] then
+			gtexkey = "none.lua"
+		end
+		
+		result.groundFaces = {
+			{
+				face = poly,
+				modes = {
+					{
+						type = "FILL",
+						key = gtexkey,
+					}
+				},
+				loop = true,
+			}
+		}
+		
+		if constrParams.paver_terrainAlignment == 1 then
+			result.terrainAlignmentLists = { {
+				type = "EQUAL", 
+				faces = { poly },
+				slopeLow = 0.3,
+				slopeHigh = 0.6
+			} }
+		else
+			result.terrainAlignmentLists = { {
+				type = "EQUAL",
+				faces = {}
+			} }
+		end
+				
+		for i,point in pairs(createRectangle(width, height)) do
+			table.insert(result.models, {
+				id = paver.markerId,
+				transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, point[1], point[2], 0, 1 }
+			})
+		end
+		
+		return result
+	end,
+}
+end

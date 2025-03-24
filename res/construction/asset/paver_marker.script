@@ -25,24 +25,15 @@ return {
 			type = "EQUAL",
 			faces = {}
 		} }
-		
-		if not constrParams.paver_groundTex_mode then
-			print("params.paver_groundTex_mode missing !")
-			return result
-		end
-		if not constrParams.paver_groundTex then
-			print("params.paver_groundTex missing !")
-			return result
-		end
-		
-		local gtexkey = scriptParams.groundTexTypes[constrParams.paver_groundTex+1]
-		if constrParams.paver_groundTex_check>0 and scriptParams.gtexInfos.terrainTexDesc[gtexkey] then  -- show preview
+				
+		local gtexkey = scriptParams.groundTexTypes[(constrParams.paver_groundTex or 0)+1]
+		if (constrParams.paver_groundTex_check or 0)>0 and scriptParams.gtexInfos.terrainTexDesc[gtexkey] then  -- show preview
 			result.groundFaces = {
 				{
 					face = {{20,-20}, {20,20}, {-20,20}, {-20,-20}},
 					modes = {
 						{
-							type = strokeModes[constrParams.paver_groundTex_mode+1],
+							type = strokeModes[(constrParams.paver_groundTex_mode or 0)+1],
 							key = gtexkey,
 						}
 					},

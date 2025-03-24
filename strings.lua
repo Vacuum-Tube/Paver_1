@@ -29,10 +29,10 @@ Beside the vanilla terrain textures from the paint tool, ground textures from so
 [/list]
 If they are activated, their textures will be available in the list. If not, some entries may still be in the list without function (I cannot determine whether some mods are active; they just create an empty area).
 ]],
-			con_name = "Paver",
-			con_param = "Paver Constructor",
+			con_name = "Paver - Polygon",
+			con_param = "Paver Polygon Constructor",
 			con_value = "Click on the terrain to create a polygon",
-			con_groundTex = "Ground Texture Type (only for peview!)",
+			con_groundTex = "Ground Texture Type",
 			con_groundTex_check = "Preview On/Off",
 			con_param_tt = [[
 This is only a preview to get an impression of the ground texture.
@@ -44,6 +44,11 @@ Can create free-form areas with any ground texture.
 Click on the terrain to create a polygon area (not intersecting). A window will appear for selecting the ground texture. When pressing 'Pave', the area will be filled with the texture.
 
 Optionally, an additional border texture (Stroke) can be defined. If deactivating fill, the stroke is even possible with 2 markers as a line (a SMALL stone in its center can be used for editing and bulldozing).]],
+			con_name_preset = "Paver - Preset Shapes",
+			con_desc_preset = [[
+Instead of the free-form tool, this provides predefined shapes.
+
+Can also be used as preview to get an impression of the ground texture. ]],
 			selfIntersectingWarning = "WARNING: Polygon is self-intersecting",
 			mix_tooltip = "Custom ground texture files from the vanilla folder. Some can be used as a stroke texture.",
 			mod_nep = "Natural Environment Professional (NEP)",
@@ -92,9 +97,9 @@ Neben den Vanilla Texturen vom Maltool, sind auch die Bodentexturen aus einigen 
 [/list]
 Wenn diese aktiviert sind, sind deren Texturen in der Liste verfügbar. Falls nicht, sind einige Einträge trotzdem in der Liste, aber ohne Funktion (Ich kann nicht erkennen ob manche Mods aktiv sind; es wird aber einfach nur eine leere Fläche erzeugt).
 ]],
-			con_name = "Paver (Pflasterer)",
+			con_name = "Paver (Pflasterer) - Polygon",
 			con_value = "Klick auf das Terrain um ein Polygon zu erzeugen",
-			con_groundTex = "Boden Textur Typ (nur zur Vorschau!)",
+			con_groundTex = "Boden Textur Typ",
 			con_param_tt = [[
 Dies ist nur eine Vorschau, um einen Eindruck der Bodentextur zu bekommen.
 Verschwindet beim finalen Bau.
@@ -105,6 +110,11 @@ Kann Frei-Form-Flächen mit beliebiger Bodentextur erzeugen.
 Klicke auf das Terrain um eine Polygon Fläche zu erzeugen (nicht überschneidend). Ein Fenster erscheint um die Bodentextur auszuwählen. Mit einem Klick auf 'Pave' wird die komplette Fläche mit der Textur gefüllt.
 
 Optional kann eine zusätzliche Randtextur definiert werden (Stroke). Wenn fill deaktiviert wird, ist Stroke sogar mit 2 Markern als Linie möglich (ein KLEINER Stein im Zentrum ermöglicht das Löschen und Bearbeiten).]],
+			con_name_preset = "Paver (Pflasterer) - Preset Formen",
+			con_desc_preset = [[
+Anstelle des Frei-Form-Tools gibt es hier vordefinierte Formen.
+
+Kann außerdem als Vorschau genutzt werden, um einen Eindruck der Bodentextur zu bekommen. ]],
 			selfIntersectingWarning = "WARNUNG: Polygon überschneidet sich",
 			mix_tooltip = "Spezielle Ground Textures aus dem Vanilla Ordner. Manche können als Stroke genutzt werden.",
 			Mode = "Modus",
@@ -112,6 +122,10 @@ Optional kann eine zusätzliche Randtextur definiert werden (Stroke). Wenn fill 
 			Area = "Fläche",
 			None = "Keine",
 			Hole = "Loch",
+			Shape = "Form",
+			Rectangle = "Rechteck",
+			Triangle = "Dreieck",
+			Circle = "Kreis",
 			["for leveling"] = "für Ebnen",
 			["Make Terrain Flat"] = "Terrain ebnen",
 			

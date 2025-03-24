@@ -10,6 +10,7 @@ local paver = {
 	markerIdbulldozable = "asset/paver_marker_bulldozable.mdl",
 	conFileMarker = "asset/paver_marker.con",
 	conFileResult = "asset/paver_result.con",
+	conFilePreset = "asset/paver_preset.con",
 	zonecolor = {0.8, 0.8, 0.8, 0.7},
 	zonecolorBad = {0.8, 0, 0, 1},
 	modes = {
@@ -176,17 +177,32 @@ function paver.initGroundTexRep()
 end
 
 function paver.postRunFn(settings, modsettings)
-	local types_con, typesinfo = gtex_rep.initGroundTexRep()
+	local types, typesinfo = gtex_rep.initGroundTexRep()
+	local types_names = {}
+	for i,groundTex in pairs(types) do
+		table.insert(types_names, typesinfo.name[groundTex] or groundTex)
+	end
 	local paver_con_marker = api.res.constructionRep.get(api.res.constructionRep.find(paver.conFileMarker))
 	local paver_con_res = api.res.constructionRep.get(api.res.constructionRep.find(paver.conFileResult))
+	local paver_con_preset = api.res.constructionRep.get(api.res.constructionRep.find(paver.conFilePreset))
 	for _,p in pairs(paver_con_marker.params) do 
 		if p.key=="paver_groundTex" then 
-			p.values = types_con
+			p.values = types_names
+		end
+	end
+	for _,p in pairs(paver_con_preset.params) do 
+		if p.key=="paver_groundTex" then 
+			p.values = types_names
 		end
 	end
 	paver_con_marker.updateScript.fileName = "construction/asset/paver_marker.updateFn"
 	paver_con_marker.updateScript.params = {
-		groundTexTypes = types_con,
+		groundTexTypes = types,
+		gtexInfos = typesinfo,
+	}
+	paver_con_preset.updateScript.fileName = "construction/asset/paver_preset.updateFn"
+	paver_con_preset.updateScript.params = {
+		groundTexTypes = types,
 		gtexInfos = typesinfo,
 	}
 end

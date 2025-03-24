@@ -388,7 +388,7 @@ function data()
 				if name == "plan" then
 					table.insert(state.markers, param.marker)
 					if param.gtype then
-						paver.updateMarkerPreviews(state.markers, param.gtype)
+						-- paver.updateMarkerPreviews(state.markers, param.gtype)
 					end
 				elseif name == "remove_last_marker" then
 					print("Removing last marker")
@@ -396,7 +396,7 @@ function data()
 					print(marker.id)
 					game.interface.bulldoze(marker.id)
 				elseif name == "update_previews" then
-					paver.updateMarkerPreviews(state.markers, param)
+					-- paver.updateMarkerPreviews(state.markers, param)
 				elseif name == "pave" then
 					paver.pave(paver.getPolygon(state.markers), paver.types[param.type], param.fill, param.stroke_mode, paver.types[param.stroke_type] )
 				elseif name == "reset" then

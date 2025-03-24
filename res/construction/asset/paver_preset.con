@@ -1,0 +1,43 @@
+local paramsDef = require "paver.params"
+
+function data()
+    return {
+        type = "ASSET_DEFAULT",
+        buildMode = "MULTI",
+        categories = {"misc"},
+        availability = {
+            yearFrom = 0,
+            yearTo = 0
+        },
+        order = 0,
+        description = {
+            name = _("con_name_preset"),
+            description = _("con_desc_preset")
+        },
+        skipCollision = true,
+        autoRemovable = false,
+        params = {
+            {
+                key = "paver_shape",
+                name = _("Shape"),
+                values = { _("Rectangle"), _("Triangle"), _("Circle") },
+            },
+            {
+                key = "paver_groundTex",
+                name = _("con_groundTex"),
+                values =  {"ERROR - postRunFn not executed"},
+				uiType = "COMBOBOX",
+				-- tooltip = _(""),
+            },
+			paramsDef.width.params,
+            paramsDef.height.params,
+            {
+                key = "paver_terrainAlignment",
+                name = _("Make Terrain Flat"),
+				uiType = "CHECKBOX",
+            },
+        },
+        -- updateFn = function(params)
+        -- end
+    }
+end

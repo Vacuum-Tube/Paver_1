@@ -15,30 +15,30 @@ function data()
         skipCollision = true,
         autoRemovable = true,
         params = {
-            {
-                key = "paver_groundTex",
-                name = _("con_groundTex"),
-                values =  {"ERROR - postRunFn not executed"},
-				uiType = "COMBOBOX",
-				tooltip = _("con_param_tt"),
-            },
-            {
-                key = "paver_groundTex_mode",
-                name = _("Mode"),
-                values =  {
-					"FILL",
-					"STROKE",
-					"STROKE_INNER",
-					"STROKE_OUTER",
-				},
-				tooltip = _("con_param_tt"),
-            },
-            {
-                key = "paver_groundTex_check",
-                name = _("con_groundTex_check"),
-				tooltip = _("con_param_tt"),
-				uiType = "CHECKBOX",
-            },
+            -- {
+                -- key = "paver_groundTex",
+                -- name = _("con_groundTex"),
+                -- values =  {"ERROR - postRunFn not executed"},
+				-- uiType = "COMBOBOX",
+				-- tooltip = _("con_param_tt"),
+            -- },
+            -- {
+                -- key = "paver_groundTex_mode",
+                -- name = _("Mode"),
+                -- values =  {
+					-- "FILL",
+					-- "STROKE",
+					-- "STROKE_INNER",
+					-- "STROKE_OUTER",
+				-- },
+				-- tooltip = _("con_param_tt"),
+            -- },
+            -- {
+                -- key = "paver_groundTex_check",
+                -- name = _("con_groundTex_check"),
+				-- tooltip = _("con_param_tt"),
+				-- uiType = "CHECKBOX",
+            -- },
             {
                 key = "paver_dummy",
                 name = _("con_param"),
