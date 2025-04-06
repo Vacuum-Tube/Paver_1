@@ -52,8 +52,8 @@ return {
 		}
 		
 		local width = paramsDef.width.getValue(constrParams)
-		local height = paramsDef.height.getValue(constrParams)
-		if paramsDef.height.getIndex(constrParams)==0 then
+		local height = paramsDef.length.getValue(constrParams)
+		if paramsDef.length.getIndex(constrParams)==0 then
 			height = width
 		end
 		

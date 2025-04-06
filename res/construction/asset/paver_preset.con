@@ -30,7 +30,7 @@ function data()
 				-- tooltip = _(""),
             },
 			paramsDef.width.params,
-            paramsDef.height.params,
+            paramsDef.length.params,
             {
                 key = "paver_terrainAlignment",
                 name = _("Make Terrain Flat"),

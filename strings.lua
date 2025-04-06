@@ -110,7 +110,7 @@ Kann Frei-Form-Flächen mit beliebiger Bodentextur erzeugen.
 Klicke auf das Terrain um eine Polygon Fläche zu erzeugen (nicht überschneidend). Ein Fenster erscheint um die Bodentextur auszuwählen. Mit einem Klick auf 'Pave' wird die komplette Fläche mit der Textur gefüllt.
 
 Optional kann eine zusätzliche Randtextur definiert werden (Stroke). Wenn fill deaktiviert wird, ist Stroke sogar mit 2 Markern als Linie möglich (ein KLEINER Stein im Zentrum ermöglicht das Löschen und Bearbeiten).]],
-			con_name_preset = "Paver (Pflasterer) - Preset Formen",
+			con_name_preset = "Paver (Pflasterer) - Preset",
 			con_desc_preset = [[
 Anstelle des Frei-Form-Tools gibt es hier vordefinierte Formen.
 
