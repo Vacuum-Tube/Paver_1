@@ -5,9 +5,9 @@ function data()
 			mod_desc = [[
 Can create free-form areas with any ground texture.
 
-Find under 'misc' in the asset menu. Click on the terrain to create a polygon. With a dedicated window, you can customize the ground texture and optionally set a border texture. To have an impression of the ground texture, you can use the preview setting.
+Find under 'misc' in the asset menu. Click on the terrain to create a polygon. With a dedicated window, you can customize the ground texture and optionally set a border texture. Additionally, there are preset shapes (rectangle, triangle, circle) as usual constructions, which can also be used as preview for the textures.
 
-The created areas can also be conveniently upgraded with further options. With the terrain aligment option, this mod can even be used as a flattener.
+The created areas can be conveniently upgraded with further options. With the terrain aligment option, this mod can even be used as a flattener.
 
 Beside the vanilla terrain textures from the paint tool, ground textures from some mods are supported: [list]
 [*]Natural Environment Professional (NEP)
@@ -73,9 +73,9 @@ Can also be used as preview to get an impression of the ground texture. ]],
 			mod_desc = [[
 Kann Frei-Form-Flächen mit beliebiger Bodentextur erzeugen.
 
-Im Asset Menü unter "Verschiedenes" zu finden. Klicke auf das Terrain um eine Polygon Fläche zu erzeugen. Ein Fenster erscheint, um die Grundfläche auszuwählen und optional eine Randtextur. Um einen Eindruck der Bodentextur zu bekommen, gibt es eine Vorschau Option.
+Im Asset Menü unter "Verschiedenes" zu finden. Klicke auf das Terrain um eine Polygon Fläche zu erzeugen. Ein Fenster erscheint, um die Grundfläche auszuwählen und optional eine Randtextur. Zusätzlich gibt es Preset Formen (Rechteck, Dreieck, Kreis) als klassische Konstruktionen, welche auch als Vorschau für die Texturen genutzt werden können.
 
-Die erzeugten Flächen können außerdem bequem geupgraded werden mit weiteren Optionen. So kann das Tool mit der Terrain Angleichung auch zum Ebnen/Planieren genutzt werden.
+Die erzeugten Flächen können bequem geupgraded werden mit weiteren Optionen. So kann das Tool mit der Terrain Angleichung auch zum Ebnen/Planieren genutzt werden.
 
 Neben den Vanilla Texturen vom Maltool, sind auch die Bodentexturen aus einigen Mods unterstützt: [list]
 [*]Natural Environment Professional (NEP)
