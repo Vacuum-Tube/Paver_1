@@ -10,24 +10,28 @@ Find under 'misc' in the asset menu. Click on the terrain to create a polygon. W
 The created areas can be conveniently upgraded with further options. With the terrain aligment option, this mod can even be used as a flattener.
 
 Beside the vanilla terrain textures from the paint tool, ground textures from some mods are supported: [list]
-[*]Natural Environment Professional (NEP)
-[*]Ingo's textures - Pavers
-[*]Ingo's textures - Rocks and Fields
-[*]Ingo's Vegetation
-[*]Ingo's Vegetation Extended
-[*]Mariotator Ground Textures 1.0
-[*]Mariotator Ground Textures 2.0
-[*]Mariotator Ground Textures 3.0
-[*]Mariotator Ground Textures 4.0
-[*]Mariotator Sexy Vegetation
-[*]Mariotator Sexy Vegetation 2
-[*]Farm land textures (JamesT85Gaming)
-[*]Farmland Textures (Quince99)
-[*]Alpenheuler Pflasterpaket 3
-[*]BloodyRulez Cobblestone-Textures 1.0
-[*]Roads´n Trams Project (RTP)
+[*][url=https://www.transportfever.net/filebase/entry/5942-natural-environment-professional-2/]Natural Environment Professional (NEP)[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2763516913]Ingo's textures - Pavers[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2763525700]Ingo's textures - Rocks and Fields[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2573124746]Ingo's Vegetation[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3432184100]Ingo's Vegetation Extended[/url]
+[*][url=https://www.transportfever.net/filebase/entry/5852-bodentexturen-1-0-sch%C3%B6nbau-pinseltool/]Mariotator Ground Textures 1.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/5870-bodentexturen-2-0-sch%C3%B6nbau-pinseltool/]Mariotator Ground Textures 2.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/6110-bodentexturen-3-0-sch%C3%B6nbau-pinseltool/]Mariotator Ground Textures 3.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/6250-bodentexturen-4-0-sch%C3%B6nbau-pinseltool/]Mariotator Ground Textures 4.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/5939-sexy-vegetation-sch%C3%B6nbau-pinseltool/]Mariotator Sexy Vegetation[/url]
+[*][url=https://www.transportfever.net/filebase/entry/6251-sexy-vegetation-2-0-sch%C3%B6nbau-pinseltool/]Mariotator Sexy Vegetation 2[/url]
+[*][url=https://steamcommunity.com/workshop/filedetails/?id=2812141821]Farm Land textures (JamesT85Gaming)[/url]
+[*][url=https://steamcommunity.com/workshop/filedetails/?id=2233342755]Farmland Textures (Quince99)[/url]
+[*][url=https://www.transportfever.net/filebase/entry/6191-alpenheulers-pflasterpaket-3-von-burgen-und-alten-hinterh%C3%B6fen-tpf2-texturen-f%C3%BCr/]Alpenheuler Pflasterpaket 3[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2233592994]BloodyRulez Cobblestone-Textures 1.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/5675-roads-n-trams-projekt-rtp/]Roads´n Trams Project (RTP)[/url]
 [/list]
 If they are activated, their textures will be available in the list. If not, some entries may still be in the list without function (I cannot determine whether some mods are active; they just create an empty area).
+
+[b]Warning:[/b] Too many active ground textures can impact performance.
+
+GitHub: https://github.com/Vacuum-Tube/Paver_1
 ]],
 			con_name = "Paver - Polygon",
 			con_param = "Paver Polygon Constructor",
@@ -78,24 +82,28 @@ Im Asset Menü unter "Verschiedenes" zu finden. Klicke auf das Terrain um eine P
 Die erzeugten Flächen können bequem geupgraded werden mit weiteren Optionen. So kann das Tool mit der Terrain Angleichung auch zum Ebnen/Planieren genutzt werden.
 
 Neben den Vanilla Texturen vom Maltool, sind auch die Bodentexturen aus einigen Mods unterstützt: [list]
-[*]Natural Environment Professional (NEP)
-[*]Ingo's Texturen - Pflaster
-[*]Ingo's Texturen - Felsen und Acker
-[*]Ingo's Vegetation
-[*]Ingo's Vegetation Extended
-[*]Mariotator Bodentexturen 1.0
-[*]Mariotator Bodentexturen 2.0
-[*]Mariotator Bodentexturen 3.0
-[*]Mariotator Bodentexturen 4.0
-[*]Mariotator Sexy Vegetation
-[*]Mariotator Sexy Vegetation 2
-[*]Farm land textures (JamesT85Gaming)
-[*]Farmland Textures (Quince99)
-[*]Alpenheuler Pflasterpaket 3
-[*]BloodyRulez Kopfsteinpflaster-Texturen 1.0
-[*]Roads´n Trams Project (RTP)
+[*][url=https://www.transportfever.net/filebase/entry/5942-natural-environment-professional-2/]Natural Environment Professional (NEP)[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2763516913]Ingo's Texturen - Pflaster[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2763525700]Ingo's Texturen - Felsen und Acker[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2573124746]Ingo's Vegetation[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3432184100]Ingo's Vegetation Extended[/url]
+[*][url=https://www.transportfever.net/filebase/entry/5852-bodentexturen-1-0-sch%C3%B6nbau-pinseltool/]Mariotator Bodentexturen 1.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/5870-bodentexturen-2-0-sch%C3%B6nbau-pinseltool/]Mariotator Bodentexturen 2.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/6110-bodentexturen-3-0-sch%C3%B6nbau-pinseltool/]Mariotator Bodentexturen 3.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/6250-bodentexturen-4-0-sch%C3%B6nbau-pinseltool/]Mariotator Bodentexturen 4.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/5939-sexy-vegetation-sch%C3%B6nbau-pinseltool/]Mariotator Sexy Vegetation[/url]
+[*][url=https://www.transportfever.net/filebase/entry/6251-sexy-vegetation-2-0-sch%C3%B6nbau-pinseltool/]Mariotator Sexy Vegetation 2[/url]
+[*][url=https://steamcommunity.com/workshop/filedetails/?id=2812141821]Farm Land textures (JamesT85Gaming)[/url]
+[*][url=https://steamcommunity.com/workshop/filedetails/?id=2233342755]Farmland Textures (Quince99)[/url]
+[*][url=https://www.transportfever.net/filebase/entry/6191-alpenheulers-pflasterpaket-3-von-burgen-und-alten-hinterh%C3%B6fen-tpf2-texturen-f%C3%BCr/]Alpenheuler Pflasterpaket 3[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2233592994]BloodyRulez Kopfsteinpflaster-Texturen 1.0[/url]
+[*][url=https://www.transportfever.net/filebase/entry/5675-roads-n-trams-projekt-rtp/]Roads´n Trams Project (RTP)[/url]
 [/list]
 Wenn diese aktiviert sind, sind deren Texturen in der Liste verfügbar. Falls nicht, sind einige Einträge trotzdem in der Liste, aber ohne Funktion (Ich kann nicht erkennen ob manche Mods aktiv sind; es wird aber einfach nur eine leere Fläche erzeugt).
+
+[b]Warnung:[/b] Zu viele Bodentexuren können die Performance beeinträchtigen.
+
+GitHub: https://github.com/Vacuum-Tube/Paver_1
 ]],
 			con_name = "Paver (Pflasterer) - Polygon",
 			con_value = "Klick auf das Terrain um ein Polygon zu erzeugen",
